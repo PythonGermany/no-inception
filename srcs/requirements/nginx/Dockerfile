@@ -16,7 +16,7 @@ COPY conf/. .
 COPY tools/. .
 COPY .ssl/. .
 
-COPY bonus/. /var/www/rburgsta.example/
+COPY bonus/. /var/www/pythongermany.de/
 
 RUN apt-get update && apt-get upgrade -y && sh nginx.sh && sh bonus.sh
 

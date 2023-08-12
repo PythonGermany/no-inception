@@ -71,7 +71,7 @@ services:
   ftp:
     container_name: ${FTP_HOST}
     build:
-      context: ./requirements/bonus/ftp
+      context: ./requirements/ftp
       args:
         # FTP config info
         - FTP_PASV_MIN_PORT_ARG=${FTP_PASV_MIN_PORT}
@@ -89,7 +89,7 @@ services:
   redis:
     container_name: ${REDIS_HOST}
     build:
-      context: ./requirements/bonus/redis
+      context: ./requirements/redis
       args:
         # Redis config info
         - REDIS_HOST_ARG=${REDIS_HOST}

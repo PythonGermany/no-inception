@@ -9,7 +9,7 @@ openssl req -new -x509 -key ca-key.pem -out cacert.pem -subj $(cat ../conf/ssl_i
 
 # Create required directories
 mkdir -p ../requirements/nginx/.ssl
-mkdir -p ../requirements/bonus/ftp/.ssl
+mkdir -p ../requirements/ftp/.ssl
 
 # Generate SSL credentials for nginx
 if [ "$USE_CERTBOT" = "y" ]; then
@@ -31,8 +31,8 @@ fi
 sh ssl_generate.sh server
 
 # Move ftp SSL credentials to the appropriate locations
-mv cacert.pem ../requirements/bonus/ftp/.ssl/
-mv server-cert.pem ../requirements/bonus/ftp/.ssl/
-mv server-key.pem ../requirements/bonus/ftp/.ssl/
+mv cacert.pem ../requirements/ftp/.ssl/
+mv server-cert.pem ../requirements/ftp/.ssl/
+mv server-key.pem ../requirements/ftp/.ssl/
 
 rm -f ca-key.pem

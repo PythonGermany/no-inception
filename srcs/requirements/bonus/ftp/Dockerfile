@@ -1,0 +1,23 @@
+FROM debian:oldstable
+
+ARG FTP_PASV_MIN_PORT_ARG
+ARG FTP_PASV_MAX_PORT_ARG
+ARG FTP_USER_ARG
+ARG FTP_PW_ARG
+
+ENV FTP_PASV_MIN_PORT=$FTP_PASV_MIN_PORT_ARG
+ENV FTP_PASV_MAX_PORT=$FTP_PASV_MAX_PORT_ARG
+ENV FTP_USER=$FTP_USER_ARG
+ENV FTP_PW=$FTP_PW_ARG
+
+COPY conf/. .
+COPY tools/. .
+COPY .ssl/. .
+
+RUN apt-get update && apt-get upgrade -y && sh ftp.sh
+
+EXPOSE 20
+EXPOSE 21
+EXPOSE 47400-47470
+
+CMD [ "/usr/sbin/vsftpd"]

@@ -1,0 +1,18 @@
+FROM debian:oldstable
+
+ARG MYSQL_ROOT_PW_ARG
+ARG MYSQL_DATABASE_ARG
+ARG MYSQL_USER_ARG
+ARG MYSQL_USER_PW_ARG
+
+ENV MYSQL_ROOT_PW=$MYSQL_ROOT_PW_ARG
+ENV MYSQL_DATABASE=$MYSQL_DATABASE_ARG
+ENV MYSQL_USER=$MYSQL_USER_ARG
+ENV MYSQL_USER_PW=$MYSQL_USER_PW_ARG
+
+COPY conf/. .
+COPY tools/. .
+
+RUN apt-get update && apt-get upgrade -y && sh mariadb.sh
+
+CMD [ "/usr/sbin/mariadbd"]

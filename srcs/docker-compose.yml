@@ -1,0 +1,119 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ./requirements/nginx
+      args:
+        - DOMAIN_NAME_ARG=${DOMAIN_NAME}
+        # Wordpress connection info
+        - WORDPRESS_HOST_ARG=${WORDPRESS_HOST}
+        - WORDPRESS_PORT_ARG=${WORDPRESS_PORT}
+    restart: unless-stopped
+    volumes:
+      - wordpress:/var/www/${DOMAIN_NAME}
+    networks:
+      - docker-network
+    ports:
+      - 443:443
+
+  wordpress:
+    container_name: ${WORDPRESS_HOST}
+    build:
+      context: ./requirements/wordpress
+      args:
+        - DOMAIN_NAME_ARG=${DOMAIN_NAME}
+        # Wordpress config info
+        - WORDPRESS_HOST_ARG=${WORDPRESS_HOST}
+        - WORDPRESS_PORT_ARG=${WORDPRESS_PORT}
+        - WORDPRESS_URL_ARG=${WORDPRESS_URL}
+        - WORDPRESS_TITLE_ARG=${WORDPRESS_TITLE}
+        - WORDPRESS_ADMIN_ARG=${WORDPRESS_ADMIN}
+        - WORDPRESS_ADMIN_PW_ARG=${WORDPRESS_ADMIN_PW}
+        - WORDPRESS_ADMIN_EMAIL_ARG=${WORDPRESS_ADMIN_EMAIL}
+        - WORDPRESS_PLUGINS_ARG=${WORDPRESS_PLUGINS}
+        # Adminer file name
+        - ADMINER_FILE_NAME_ARG=${ADMINER_FILE_NAME}
+        # Database connection info
+        - MYSQL_DATABASE_ARG=${MYSQL_DATABASE}
+        - MYSQL_USER_ARG=${MYSQL_USER}
+        - MYSQL_USER_PW_ARG=${MYSQL_USER_PW}
+        - MYSQL_HOST_ARG=${MYSQL_HOST}
+        # Redis connection info
+        - REDIS_HOST_ARG=${REDIS_HOST}
+        - REDIS_PORT_ARG=${REDIS_PORT}
+        - REDIS_PW_ARG=${REDIS_PW}
+    restart: unless-stopped
+    volumes:
+      - wordpress:/var/www/${DOMAIN_NAME}
+    networks:
+      - docker-network
+    depends_on:
+      - mariadb
+
+  mariadb:
+    container_name: ${MYSQL_HOST}
+    build:
+      context: ./requirements/mariadb
+      args:
+        # Database config info
+        - MYSQL_ROOT_PW_ARG=${MYSQL_ROOT_PW}
+        - MYSQL_DATABASE_ARG=${MYSQL_DATABASE}
+        - MYSQL_USER_ARG=${MYSQL_USER}
+        - MYSQL_USER_PW_ARG=${MYSQL_USER_PW}
+    restart: unless-stopped
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - docker-network
+
+  ftp:
+    container_name: ${FTP_HOST}
+    build:
+      context: ./requirements/bonus/ftp
+      args:
+        # FTP config info
+        - FTP_PASV_MIN_PORT_ARG=${FTP_PASV_MIN_PORT}
+        - FTP_PASV_MAX_PORT_ARG=${FTP_PASV_MAX_PORT}
+        - FTP_USER_ARG=${FTP_USER}
+        - FTP_PW_ARG=${FTP_PW}
+    restart: unless-stopped
+    volumes:
+      - wordpress:/home/${FTP_USER}/ftp/files
+    ports:
+      - 20:20
+      - 21:21
+      - 47400-47470:47400-47470
+
+  redis:
+    container_name: ${REDIS_HOST}
+    build:
+      context: ./requirements/bonus/redis
+      args:
+        # Redis config info
+        - REDIS_HOST_ARG=${REDIS_HOST}
+        - REDIS_PORT_ARG=${REDIS_PORT}
+        - REDIS_PW_ARG=${REDIS_PW}
+    restart: unless-stopped
+    networks:
+      - docker-network
+
+volumes:
+  wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${WORDPRESS_VOLUME_PATH}
+      o: bind
+
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${MYSQL_VOLUME_PATH}
+      o: bind
+
+networks:
+  docker-network:
+    driver: bridge

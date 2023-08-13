@@ -1,6 +1,0 @@
-/C=DE
-/ST=Baden-Wuerttemberg
-/L=Heilbronn
-/O=SelfSigned_42HN
-/OU=rburgsta
-/CN=42

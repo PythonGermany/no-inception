@@ -1,18 +1,17 @@
-if [ -f ../.env ]; then
+set -e
+if [ -f .env ]; then
     echo "env_create.sh: .env file already exists."
     exit 1
 fi
-read -p 'env_create.sh: Enter your domain name: ' DOMAIN_NAME
 
 # Copy template .env file
-cp ../conf/.env-sample ../.env
+cp conf/.env-sample .env
 
-# Insert default values into .env file
-sed -i "s/{LOGIN}/$USER/g" ../.env
-sed -i "s/{DOMAIN_NAME}/$DOMAIN_NAME/g" ../.env
-sed -i "s/{WORDPRESS_ADMIN_PW}/$(openssl rand -base64 64 | tr -d '=\n\/')/g" ../.env
-sed -i "s/{ADMINER_FILE_NAME}/$(openssl rand -base64 32 | tr -d '=\n\/')/g" ../.env
-sed -i "s/{MYSQL_ROOT_PW}/$(openssl rand -base64 64 | tr -d '=\n\/')/g" ../.env
-sed -i "s/{MYSQL_USER_PW}/$(openssl rand -base64 64 | tr -d '=\n\/')/g" ../.env
-sed -i "s/{REDIS_PW}/$(openssl rand -base64 64 | tr -d '=\n\/')/g" ../.env
-sed -i "s/{FTP_PW}/$(openssl rand -base64 64 | tr -d '=\n\/')/g" ../.env
+# Read user input
+read -p 'env_create.sh: Enter the desired volume path: ' VOLUMES_PATH
+read -p 'env_create.sh: Enter your domain name(s) separated by spaces: ' DOMAIN_NAMES
+
+# Insert default values and user input into .env file
+sed -i "s/{VOLUMES_PATH}/$VOLUMES_PATH/g" .env
+sed -i "s/{DOMAIN_NAMES}/$DOMAIN_NAMES/g" .env
+#sed -i "s/{MYSQL_ROOT_PW}/$(openssl rand -base64 64 | tr -d '=\n\/')/g" ../.env

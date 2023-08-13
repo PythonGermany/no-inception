@@ -14,7 +14,7 @@ RESET = \033[0m
 all: up
 
 # Docker
-up: volumes_create
+up:
 	sudo docker compose -f srcs/docker-compose.yml up -d
 down:
 	sudo docker compose -f srcs/docker-compose.yml down

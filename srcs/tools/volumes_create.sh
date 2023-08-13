@@ -1,6 +1,6 @@
 set -e
 # Read user input
-read -p 'env_create.sh: Enter the desired volume path: ' VOLUMES_PATH
+read -p 'volumes_create.sh: Enter the desired volume path: ' VOLUMES_PATH
 
 # Create the volume directories
 mkdir -p $VOLUMES_PATH/.credentials

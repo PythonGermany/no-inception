@@ -2,16 +2,9 @@ set -e
 # Install requirements for nginx
 apt-get install -y nginx && \
 
-mkdir -p /etc/letsencrypt/live/ && \
-
-# Move SSL credentials to the appropriate location
-for DOMAIN in $DOMAINS; do
-  mkdir -p /etc/letsencrypt/live/$DOMAIN
-  mv .ssl/$DOMAIN/. /etc/letsencrypt/live/$DOMAIN
-done
-
 # Remove default nginx site
 rm -rf /etc/nginx/sites-enabled/default
+rm -rf /var/www/html
 
 for DOMAIN in $DOMAINS; do
   # Copy nginx config template

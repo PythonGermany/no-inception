@@ -13,8 +13,9 @@ sed -i "s/{MYSQL_ROOT_PW}/$MYSQL_ROOT_PW/g" setup_mariadb.sql
 
 # Start and setup mariadb
 /etc/init.d/mariadb start
-mariadb < setup_mariadb.sql
+#mariadb < setup_mariadb.sql
 
+mkdir -p /credentials
 # Set up mariadb databases
 for DOMAIN in $DOMAINS; do
   DB_NAME="wp_$DOMAIN"
@@ -25,8 +26,8 @@ for DOMAIN in $DOMAINS; do
   sed -i "s/{MYSQL_DATABASE}/$DB_NAME/g" create_database.sql
   sed -i "s/{MYSQL_USER}/$DB_USER/g" create_database.sql
   sed -i "s/{MYSQL_USER_PW}/$PASSWORD/g" create_database.sql
-  mariadb < create_database.sql
-  rm -rf create_database.sql
+  #mariadb < create_database.sql
+  #rm -rf create_database.sql
 done
 
 rm -rf setup_mariadb.sql create_database_template.sql

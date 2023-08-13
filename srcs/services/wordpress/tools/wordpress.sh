@@ -16,7 +16,7 @@ sed -i "s/{WORDPRESS_HOST}/$WORDPRESS_HOST/g" www.conf
 sed -i "s/{WORDPRESS_PORT}/$WORDPRESS_PORT/g" www.conf
 
 # Download wordpress files
-for DOMAIN in $DOMAIN; do
+for DOMAIN in $DOMAINS; do
   mkdir -p /var/www/$DOMAIN
   wp core download --path=/var/www/$DOMAIN --allow-root
 done

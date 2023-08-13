@@ -1,7 +1,14 @@
 set -e
 for DOMAIN in $DOMAIN_NAMES; do
   if ! wp core is-installed --path=/var/www/$DOMAIN --allow-root; then
-    echo "Installing wordpress..."
+    echo "Installing and setting up wordpress for $DOMAIN..."
+    # Set up wordpress config files
+    DB_NAME="wp_$DOMAIN"
+    DB_USER="user_$DOMAIN"
+    DB_PASSWORD=abahhAWCNAWFUIBAwufgaoiHFUWfiahwgf
+    wp config create --path=/var/www/$DOMAIN --allow-root \
+      --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASSWORD \
+      --dbhost=$MYSQL_HOST
     # Install wordpress site
     wp core install --path=/var/www/$DOMAIN --allow-root \
     --url=$WORDPRESS_URL --title=placeholder --admin_user=lol \

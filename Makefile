@@ -28,7 +28,7 @@ docker_install:
 env_create:
 	@(cd srcs && sh tools/env_create.sh)
 ssl_create:
-	@(cd srcs && sh tools/ssl_create.sh $(ARG))
+	@(cd srcs && sh tools/ssl_create.sh)
 volumes_create:
 	@sh srcs/tools/volumes_create.sh
 

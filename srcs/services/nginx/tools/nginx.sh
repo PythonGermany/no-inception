@@ -12,7 +12,7 @@ rm -rf /etc/nginx/sites-enabled/default
 
 for DOMAIN_NAME in $DOMAIN_NAMES; do
   # Copy nginx config template
-  cp wordpress.conf $DOMAIN_NAME.conf
+  cp server.conf $DOMAIN_NAME.conf
   # Set up nginx config
   sed -i "s/{DOMAIN_NAME}/$DOMAIN_NAME/g" $DOMAIN_NAME.conf
   sed -i "s/{WORDPRESS_HOST}/$WORDPRESS_HOST/g" $DOMAIN_NAME.conf

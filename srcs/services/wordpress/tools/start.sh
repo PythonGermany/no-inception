@@ -1,22 +1,17 @@
 set -e
-if ! wp core is-installed --path=/var/www/$DOMAIN_NAME --allow-root; then
-  echo "Installing wordpress..."
-  # Install wordpress site
-  wp core install --path=/var/www/$DOMAIN_NAME --allow-root \
-  --url=$WORDPRESS_URL --title=$WORDPRESS_TITLE --admin_user=$WORDPRESS_ADMIN \
-  --admin_password=$WORDPRESS_ADMIN_PW --admin_email=$WORDPRESS_ADMIN_EMAIL
-  # Install additional util plugins
-  if [ "$WORDPRESS_PLUGINS" != "" ]; then
-    utils=$(echo $WORDPRESS_PLUGINS | tr " " "\n")
-    for util in $utils; do
-      wp plugin install $util --activate --path=/var/www/$DOMAIN_NAME --allow-root
-    done
+for DOMAIN in $DOMAIN_NAMES; do
+  if ! wp core is-installed --path=/var/www/$DOMAIN --allow-root; then
+    echo "Installing wordpress..."
+    # Install wordpress site
+    wp core install --path=/var/www/$DOMAIN --allow-root \
+    --url=$WORDPRESS_URL --title=placeholder --admin_user=lol \
+    --admin_password=abahhAWCNAWFUIBAwufgaoiHFUWfiahwgf --admin_email=none@none.com
+    # Set up files permissions for wordpress
+    chown -R www-data:www-data /var/www/$DOMAIN
+    find /var/www/$DOMAIN -type d -exec chmod 755 {} \;
+    find /var/www/$DOMAIN -type f -exec chmod 644 {} \;
   fi
-  # Set up files permissions for wordpress
-  chown -R www-data:www-data /var/www/$DOMAIN_NAME
-  find /var/www/$DOMAIN_NAME -type d -exec chmod 775 {} \;
-  find /var/www/$DOMAIN_NAME -type f -exec chmod 664 {} \;
-fi
+done
 
 echo "Wordpress started!"
 /usr/sbin/php-fpm7.4 -F

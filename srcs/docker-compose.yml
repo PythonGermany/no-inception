@@ -33,6 +33,7 @@ services:
     restart: unless-stopped
     volumes:
       - wordpress:/var/www/
+      - credentials:/credentials
     networks:
       - docker-network
     depends_on:
@@ -49,6 +50,7 @@ services:
     restart: unless-stopped
     volumes:
       - mariadb:/var/lib/mysql
+      - credentials:/credentials
     networks:
       - docker-network
 

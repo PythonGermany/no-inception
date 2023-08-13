@@ -1,4 +1,4 @@
-FROM debian:oldstable
+FROM base
 
 # Domain arguments
 ARG DOMAINS_ARG
@@ -21,6 +21,6 @@ ENV MYSQL_PORT=$MYSQL_PORT_ARG
 COPY conf/. .
 COPY tools/. .
 
-RUN apt-get update && apt-get upgrade -y && sh wordpress.sh
+RUN sh wordpress.sh
 
 CMD ["sh", "start.sh"]

@@ -1,6 +1,9 @@
 set -e
-# Read user input
-read -p 'volumes_create.sh: Enter the desired volume path: ' VOLUMES_PATH
+if [ ! -f .env ]; then
+    echo "volumes_create.sh: .env file does not exist."
+    exit 1
+fi
+VOLUMES_PATH=$(grep "VOLUMES_PATH=" .env | cut -d'=' -f2)
 
 # Create the volume directories
 mkdir -p $VOLUMES_PATH/.credentials

@@ -1,4 +1,4 @@
-FROM debian:oldstable
+FROM base
 
 # Domain name argments
 ARG DOMAINS_ARG
@@ -16,7 +16,7 @@ COPY conf/. .
 COPY tools/. .
 COPY .ssl/. /etc/letsencrypt/live/
 
-RUN apt-get update && apt-get upgrade -y && sh nginx.sh
+RUN sh nginx.sh
 
 EXPOSE 443
 

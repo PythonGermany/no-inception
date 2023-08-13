@@ -1,5 +1,9 @@
 set -e
-read -p 'env_create.sh: Enter the path to your volumes: ' VOLUMES_PATH
+if [ ! -f .env ]; then
+    echo "volumes_delete.sh: .env file does not exist."
+    exit 1
+fi
+VOLUMES_PATH=$(grep "VOLUMES_PATH=" .env | cut -d'=' -f2)
 read -p "volume_delete.sh: WARNING DANGER ZONE: Deleting your data volumes? (yes/n): " RESPONSE
 if [ "$RESPONSE" = "yes" ]; then
   rm -rf $VOLUMES_PATH/.credentials

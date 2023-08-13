@@ -1,18 +1,17 @@
-if find . -type d -name ".ssl" -print -quit | grep -q .; then
-    echo "ssl_create.sh: SSL directories already exist."
+set -e
+if [ ! -f .env ]; then
+    echo "ssl_create.sh: .env file does not exist."
     exit 1
 fi
 
 sudo apt-get install -y certbot
 
-# Read user input
-read -p 'ssl_create.sh: Enter the location your certbot credentials will be stored: ' CERTBOT_PATH
-read -p 'ssl_create.sh: Enter your domain name(s) separated by spaces: ' DOMAIN_NAMES
-
+CERTBOT_PATH=$(grep "VOLUMES_PATH=" .env | cut -d'=' -f2)/.ssl
+DOMAINS=$(grep "DOMAINS=" .env | cut -d'=' -f2)
 # Generate SSL credentials for nginx
-for DOMAIN_NAME in $DOMAIN_NAMES; do
-  sudo certbot certonly --standalone --config-dir $CERTBOT_PATH -d $DOMAIN_NAME
-  mkdir -p services/nginx/.ssl/$DOMAIN_NAME
-  cp $CERTBOT_PATH/live/$DOMAIN_NAME/fullchain.pem services/nginx/.ssl/$DOMAIN_NAME/
-  cp $CERTBOT_PATH/live/$DOMAIN_NAME/privkey.pem services/nginx/.ssl/$DOMAIN_NAME/
+for DOMAIN in $DOMAINS; do
+  sudo certbot certonly $1 --standalone --config-dir $CERTBOT_PATH -d $DOMAIN
+  mkdir -p services/nginx/.ssl/$DOMAIN
+  cp $CERTBOT_PATH/live/$DOMAIN/fullchain.pem services/nginx/.ssl/$DOMAIN/
+  cp $CERTBOT_PATH/live/$DOMAIN/privkey.pem services/nginx/.ssl/$DOMAIN/
 done

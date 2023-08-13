@@ -22,15 +22,19 @@ update:
 	sudo docker compose -f srcs/docker-compose.yml build --no-cache --force-rm $(ARG)
 
 # Setup
-setup: env_create ssl_create
+setup: base_build env_create ssl_create volumes_create
 docker_install:
 	@sudo sh srcs/tools/docker_install.sh $(ARG)
+base_build:
+	docker build -t base srcs/base
 env_create:
 	@(cd srcs && sh tools/env_create.sh)
+wordpress_setup:
+	@(cd srcs && sh tools/wordpress_setup.sh)
 ssl_create:
-	@(cd srcs && sh tools/ssl_create.sh)
+	@(cd srcs && sh tools/ssl_create.sh $(ARG))
 volumes_create:
-	@sh srcs/tools/volumes_create.sh
+	@(cd srcs && sh tools/volumes_create.sh)
 
 # Delete
 env_delete:
@@ -38,7 +42,7 @@ env_delete:
 ssl_delete:
 	@(cd srcs && sh tools/ssl_delete.sh)
 volumes_delete:
-	@sh srcs/tools/volumes_delete.sh
+	@(cd srcs && sh tools/volumes_delete.sh)
 
 # Utils
 files_to_unix:
@@ -74,6 +78,6 @@ help:
 # Clean and rebuild
 clean: down
 	sudo docker image prune -a -f
-fclean: clean env_delete ssl_delete volumes_delete
+fclean: clean ssl_delete volumes_delete env_delete
 	sudo docker system prune -f --volumes
 re: fclean setup up

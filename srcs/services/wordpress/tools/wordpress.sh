@@ -16,9 +16,9 @@ sed -i "s/{WORDPRESS_HOST}/$WORDPRESS_HOST/g" www.conf
 sed -i "s/{WORDPRESS_PORT}/$WORDPRESS_PORT/g" www.conf
 
 # Download wordpress files
-for DOMAIN in $DOMAIN_NAMES; do
-  mkdir -p /var/www/$DOMAIN_NAME
-  wp core download --path=/var/www/$DOMAIN_NAME --allow-root
+for DOMAIN in $DOMAIN; do
+  mkdir -p /var/www/$DOMAIN
+  wp core download --path=/var/www/$DOMAIN --allow-root
 done
 
 # Move php-fpm config file to its respective location

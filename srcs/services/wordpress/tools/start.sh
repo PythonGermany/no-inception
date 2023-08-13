@@ -1,5 +1,5 @@
 set -e
-for DOMAIN in $DOMAIN_NAMES; do
+for DOMAIN in $DOMAINS; do
   if ! wp core is-installed --path=/var/www/$DOMAIN --allow-root; then
     echo "Installing and setting up wordpress for $DOMAIN..."
     # Set up wordpress config files
@@ -11,8 +11,8 @@ for DOMAIN in $DOMAIN_NAMES; do
       --dbhost=$MYSQL_HOST
     # Install wordpress site
     wp core install --path=/var/www/$DOMAIN --allow-root \
-    --url=$WORDPRESS_URL --title=placeholder --admin_user=lol \
-    --admin_password=abahhAWCNAWFUIBAwufgaoiHFUWfiahwgf --admin_email=none@none.com
+    --url="https://$DOMAIN" --title="placeholder" --admin_user="lol" \
+    --admin_password="abahhAWCNAWFUIBAwufgaoiHFUWfiahwgf" --admin_email=none@none.com
     # Set up files permissions for wordpress
     chown -R www-data:www-data /var/www/$DOMAIN
     find /var/www/$DOMAIN -type d -exec chmod 755 {} \;

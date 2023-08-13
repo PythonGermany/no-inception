@@ -6,7 +6,7 @@ services:
     build:
       context: ./services/nginx
       args:
-        - DOMAIN_NAMES_ARG=${DOMAIN_NAMES}
+        - DOMAINS_ARG=${DOMAINS}
         # Wordpress connection info
         - WORDPRESS_HOST_ARG=${WORDPRESS_HOST}
         - WORDPRESS_PORT_ARG=${WORDPRESS_PORT}
@@ -23,7 +23,7 @@ services:
     build:
       context: ./services/wordpress
       args:
-        - DOMAIN_NAMES_ARG=${DOMAIN_NAMES}
+        - DOMAINS_ARG=${DOMAINS}
         # Wordpress config info
         - WORDPRESS_HOST_ARG=${WORDPRESS_HOST}
         - WORDPRESS_PORT_ARG=${WORDPRESS_PORT}
@@ -44,7 +44,7 @@ services:
     build:
       context: ./services/mariadb
       args:
-        - DOMAIN_NAMES_ARG=${DOMAIN_NAMES}
+        - DOMAINS_ARG=${DOMAINS}
         # Database config info
         - MYSQL_ROOT_PW_ARG=${MYSQL_ROOT_PW}
     restart: unless-stopped

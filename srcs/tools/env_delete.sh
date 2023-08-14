@@ -6,4 +6,6 @@ if [ -s .env ]; then
   else
     echo "env_delete.sh: Abort!"
   fi
+else
+ echo "env_delete.sh: No env file to delete"
 fi

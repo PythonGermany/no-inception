@@ -6,4 +6,6 @@ if [ ! -f .env ]; then
   sed -i "s|{VOLUMES_PATH}|$VOLUMES_PATH|g" .env
   sed -i "s/{DOMAINS}/$DOMAINS/g" .env
   sed -i "s/{MYSQL_ROOT_PW}/$(openssl rand -base64 64 | tr -d '=\n\/')/g" .env
+else
+  echo "env_create.sh: Env file already exists. Skipping env creation"
 fi

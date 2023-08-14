@@ -6,4 +6,6 @@ if find . -type d -name ".ssl" -print -quit | grep -q .; then
   else
     echo "ssl_delete.sh: Abort!"
   fi
+else
+  echo "ssl_delete.sh: No ssl keys in repository to delete"
 fi

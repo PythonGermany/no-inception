@@ -6,7 +6,7 @@ fi
 
 DOMAINS=$(grep "DOMAINS=" .env | cut -d'=' -f2)
 for DOMAIN in $DOMAINS; do
-  if [ ! -f services/wordpress/conf/wordpress/$DOMAIN.keys ]; then
+  if [ ! -f services/wordpress/conf/wp_default_config/$DOMAIN.keys ]; then
     # Read user input
     read -p "wordpress_setup.sh: $DOMAIN: Enter the site title: " TITLE
     read -p "wordpress_setup.sh: $DOMAIN: Enter the admin user name: " ADMIN
@@ -16,6 +16,6 @@ for DOMAIN in $DOMAINS; do
     sed -i "s/{WP_ADMIN}/$ADMIN/g" conf/$DOMAIN.keys
     sed -i "s/{WP_ADMIN_PW}/$(openssl rand -base64 64 | tr -d '=\n\/')/g" conf/$DOMAIN.keys
     sed -i "s/{WP_ADMIN_EMAIL}/$ADMIN_EMAIL/g" conf/$DOMAIN.keys
-    mv conf/$DOMAIN.keys services/wordpress/conf/wordpress/
+    mv conf/$DOMAIN.keys services/wordpress/conf/wp_default_config/
   fi
 done

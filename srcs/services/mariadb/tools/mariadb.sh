@@ -18,10 +18,9 @@ mariadb < setup_mariadb.sql
 mkdir -p /credentials/mysql
 # Set up mariadb databases
 for DOMAIN in $DOMAINS; do
-  DB_NAME="wp_$DOMAIN"
-  DB_USER="user_$DOMAIN"
-  PASSWORD=123
-  echo "$DOMAIN $DB_NAME $DB_USER $PASSWORD" > /credentials/mysql/$DOMAIN.txt
+  DB_NAME=$(grep "DB_NAME=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+  DB_USER=$(grep "DB_USER=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+  PASSWORD=$(grep "DB_PASSWORD=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
   cp create_database_template.sql create_database.sql
   sed -i "s/{MYSQL_DATABASE}/$DB_NAME/g" create_database.sql
   sed -i "s/{MYSQL_USER}/$DB_USER/g" create_database.sql
@@ -30,4 +29,4 @@ for DOMAIN in $DOMAINS; do
   rm -rf create_database.sql
 done
 
-rm -rf setup_mariadb.sql create_database_template.sql
+rm -rf setup_mariadb.sql create_database_template.sql mysql

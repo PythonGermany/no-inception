@@ -12,5 +12,5 @@ if [ "$RESPONSE" = "yes" ]; then
     rm -rf $VOLUMES_PATH
   fi
 else
-  echo "volume_delete.sh: Abort"
+  echo "volume_delete.sh: Abort!"
 fi

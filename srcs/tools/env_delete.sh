@@ -4,6 +4,6 @@ if [ -s .env ]; then
   if [ "$RESPONSE" = 'yes' ]; then
     rm -f .env
   else
-    echo "env_delete.sh: Abort"
+    echo "env_delete.sh: Abort!"
   fi
 fi

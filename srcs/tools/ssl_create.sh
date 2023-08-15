@@ -6,6 +6,7 @@ fi
 
 sudo apt-get install -y certbot
 
+set +e
 CERTBOT_PATH=$(grep "VOLUMES_PATH=" .env | cut -d'=' -f2)/.ssl
 DOMAINS=$(grep "DOMAINS=" .env | cut -d'=' -f2)
 for DOMAIN in $DOMAINS; do

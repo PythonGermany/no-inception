@@ -16,17 +16,14 @@ sed -i "s/{MYSQL_ROOT_PW}/$MYSQL_ROOT_PW/g" setup_mariadb.sql
 mariadb < setup_mariadb.sql
 
 mkdir -p /credentials/mysql
-# Set up mariadb databases
-for DOMAIN in $DOMAINS; do
-  DB_NAME=$(grep "DB_NAME=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
-  DB_USER=$(grep "DB_USER=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
-  PASSWORD=$(grep "DB_PASSWORD=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
-  cp create_database_template.sql create_database.sql
-  sed -i "s/{MYSQL_DATABASE}/$DB_NAME/g" create_database.sql
-  sed -i "s/{MYSQL_USER}/$DB_USER/g" create_database.sql
-  sed -i "s/{MYSQL_USER_PW}/$PASSWORD/g" create_database.sql
-  mariadb < create_database.sql
-  rm -rf create_database.sql
-done
+DB_NAME=$(grep "DB_NAME=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+DB_USER=$(grep "DB_USER=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+PASSWORD=$(grep "DB_PASSWORD=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+cp create_database_template.sql create_database.sql
+sed -i "s/{MYSQL_DATABASE}/$DB_NAME/g" create_database.sql
+sed -i "s/{MYSQL_USER}/$DB_USER/g" create_database.sql
+sed -i "s/{MYSQL_USER_PW}/$PASSWORD/g" create_database.sql
+mariadb < create_database.sql
+rm -rf create_database.sql
 
-rm -rf setup_mariadb.sql create_database_template.sql mysql
+rm -rf setup_mariadb.sql mysql

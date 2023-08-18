@@ -14,7 +14,7 @@ RESET = \033[0m
 all: up
 
 # Docker
-up:
+up: base_build
 	sudo docker compose -f srcs/docker-compose.yml up -d
 down:
 	sudo docker compose -f srcs/docker-compose.yml down
@@ -22,7 +22,7 @@ update:
 	sudo docker compose -f srcs/docker-compose.yml build --no-cache --force-rm $(ARG)
 
 # Setup
-setup: base_build env_create credentials_create ssl_create volumes_create
+setup: env_create credentials_create ssl_create volumes_create
 docker_install:
 	@sudo sh srcs/tools/docker_install.sh $(ARG)
 base_build:
@@ -50,32 +50,6 @@ volumes_delete:
 files_to_unix:
 	sudo apt-get install dos2unix
 	find . -type f -exec dos2unix {} +
-help:
-	@echo "$(RED)Usage: $(YELLOW)make [target] [ARG=\"...\"]"
-	@echo "Targets:$(RESET)"
-	@echo "  all (default)  - Run 'make up'"
-	@echo "$(RED)--------------------- Docker ---------------------$(RESET)"
-	@echo "  up             - Start containers and run '$(CYAN)make volumes_delete$(RESET)'"
-	@echo "  down           - Stop containers"
-	@echo "  update         - Rebuild container"
-	@echo "$(RED)--------------------- Setup ---------------------"
-	@echo "$(YELLOW)  setup          - Run 'make $(GREEN)env_create $(BLUE)ssl_create $(MAGENTA)'"
-	@echo "$(WHITE)  docker_install - Install docker"
-	@echo "$(GREEN)  env_create     - Create .env file using random passwords"
-	@echo "$(BLUE)  ssl_create     - Create SSL certificates"
-	@echo "$(CYAN)  volumes_create  - Create volume directories"
-	@echo "$(RED)--------------------- Delete ---------------------"
-	@echo "$(GREEN)  env_delete     - Delete .env file"
-	@echo "$(BLUE)  ssl_delete     - Delete SSL certificates"
-	@echo "$(CYAN)  volumes_delete  - Delete volume directories"
-	@echo "$(RED)--------------------- Utils ---------------------$(RESET)"
-	@echo "  files_to_unix  - Convert files to unix format"
-	@echo "  help           - Display this help message"
-	@echo "$(RED)--------------------- Clean ---------------------$(RESET)"
-	@echo "  clean          - run 'make down' and delete unused images"
-	@echo "$(RED)  fclean         - Run 'make $(WHITE)clean $(GREEN)env_delete $(BLUE)ssl_delete"
-	@echo "                        $(CYAN)volumes_delete$(RESET)' and delete unused images"
-	@echo "$(RED)  re             - Run 'make fclean setup up'$(RESET)"
 
 # Clean and rebuild
 clean: down

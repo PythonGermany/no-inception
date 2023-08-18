@@ -15,23 +15,20 @@ mkdir -p /etc/mysql
 sed -i "s/{WORDPRESS_HOST}/$WORDPRESS_HOST/g" www.conf
 sed -i "s/{WORDPRESS_PORT}/$WORDPRESS_PORT/g" www.conf
 
-for DOMAIN in $DOMAINS; do
-  mkdir -p /var/www/$DOMAIN
-  # Download wordpress files
-  wp core download --path=/var/www/$DOMAIN --allow-root
-  # Set up wordpress config file
-  cp wp-config-template.php wp-config.php
-  DB_NAME=$(grep "DB_NAME=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
-  DB_USER=$(grep "DB_USER=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
-  DB_PASSWORD=$(grep "DB_PASSWORD=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
-  wget -O keys.secret https://api.wordpress.org/secret-key/1.1/salt/
-  sed -i -e "/# INSERT SECRET KEYS HERE/r keys.secret" wp-config.php
-  sed -i "s/{DB_NAME}/$DB_NAME/g" wp-config.php
-  sed -i "s/{DB_USER}/$DB_USER/g" wp-config.php
-  sed -i "s/{DB_PASSWORD}/$DB_PASSWORD/g" wp-config.php
-  sed -i "s/{DB_HOST}/$MYSQL_HOST/g" wp-config.php
-  mv wp-config.php /var/www/$DOMAIN
-done
+mkdir -p /var/www/$DOMAIN
+# Download wordpress files
+wp core download --path=/var/www/$DOMAIN --allow-root
+# Set up wordpress config file
+DB_NAME=$(grep "DB_NAME=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+DB_USER=$(grep "DB_USER=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+DB_PASSWORD=$(grep "DB_PASSWORD=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+wget -O keys.secret https://api.wordpress.org/secret-key/1.1/salt/
+sed -i -e "/# INSERT SECRET KEYS HERE/r keys.secret" wp-config.php
+sed -i "s/{DB_NAME}/$DB_NAME/g" wp-config.php
+sed -i "s/{DB_USER}/$DB_USER/g" wp-config.php
+sed -i "s/{DB_PASSWORD}/$DB_PASSWORD/g" wp-config.php
+sed -i "s/{DB_HOST}/$MYSQL_HOST/g" wp-config.php
+mv wp-config.php /var/www/$DOMAIN
 
 # Move php-fpm config file to its respective location
 mv www.conf /etc/php/7.4/fpm/pool.d/

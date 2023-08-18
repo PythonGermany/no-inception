@@ -8,10 +8,10 @@ mkdir -p conf/mysql
 mkdir -p conf/wordpress
 mkdir -p conf/redis
 DOMAIN=$(grep "DOMAIN=" .env | cut -d'=' -f2)
-if [ ! -f conf/mysql/$DOMAIN.secret ]; then
-  echo "DB_NAME=wp_$DOMAIN" > conf/mysql/$DOMAIN.secret
-  echo "DB_USER=user_$DOMAIN" >> conf/mysql/$DOMAIN.secret
-  echo "DB_PASSWORD=$(openssl rand -base64 64 | tr -d '=\n\/')" >> conf/mysql/$DOMAIN.secret
+if [ ! -f conf/mysql/mysql.secret ]; then
+  echo "DB_NAME=wp_$DOMAIN" > conf/mysql/mysql.secret
+  echo "DB_USER=user_$DOMAIN" >> conf/mysql/mysql.secret
+  echo "DB_PASSWORD=$(openssl rand -base64 64 | tr -d '=\n\/')" >> conf/mysql/mysql.secret
 else
   echo "credentials_create.sh: $DOMAIN: Mysql credentials already exists. Skipping credential creation"
 fi

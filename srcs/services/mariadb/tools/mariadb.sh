@@ -16,9 +16,9 @@ sed -i "s/{MYSQL_ROOT_PW}/$MYSQL_ROOT_PW/g" setup_mariadb.sql
 mariadb < setup_mariadb.sql
 
 mkdir -p /credentials/mysql
-DB_NAME=$(grep "DB_NAME=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
-DB_USER=$(grep "DB_USER=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
-PASSWORD=$(grep "DB_PASSWORD=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+DB_NAME=$(grep "DB_NAME=" /mysql/mysql.secret | cut -d'=' -f2)
+DB_USER=$(grep "DB_USER=" /mysql/mysql.secret | cut -d'=' -f2)
+PASSWORD=$(grep "DB_PASSWORD=" /mysql/mysql.secret | cut -d'=' -f2)
 cp create_database_template.sql create_database.sql
 sed -i "s/{MYSQL_DATABASE}/$DB_NAME/g" create_database.sql
 sed -i "s/{MYSQL_USER}/$DB_USER/g" create_database.sql

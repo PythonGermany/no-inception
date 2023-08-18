@@ -46,8 +46,6 @@ services:
     build:
       context: ./services/mariadb
       args:
-        - DOMAIN_ARG=${DOMAIN}
-        # Database config info
         - MYSQL_ROOT_PW_ARG=${MYSQL_ROOT_PW}
     restart: unless-stopped
     volumes:

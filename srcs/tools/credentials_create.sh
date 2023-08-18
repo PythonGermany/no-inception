@@ -8,7 +8,7 @@ mkdir -p conf/mysql
 mkdir -p conf/wordpress
 DOMAINS=$(grep "DOMAINS=" .env | cut -d'=' -f2)
 for DOMAIN in $DOMAINS; do
-  if [ ! -f conf/mysql/$DOMAIN.secret ]
+  if [ ! -f conf/mysql/$DOMAIN.secret ]; then
     echo "DB_NAME=wp_$DOMAIN" > conf/mysql/$DOMAIN.secret
     echo "DB_USER=user_$DOMAIN" >> conf/mysql/$DOMAIN.secret
     echo "DB_PASSWORD=$(openssl rand -base64 64 | tr -d '=\n\/')" >> conf/mysql/$DOMAIN.secret
@@ -17,7 +17,7 @@ for DOMAIN in $DOMAINS; do
   fi
   
 
-  if [ ! -f conf/wordpress/$DOMAIN.secret ]
+  if [ ! -f conf/wordpress/$DOMAIN.secret ]; then
     read -p "credentials_create.sh: $DOMAIN: Enter the admin user name: " ADMIN
     read -p "credentials_create.sh: $DOMAIN: Enter the admin email: " ADMIN_EMAIL
     echo "WP_TITLE=placeholder" > conf/wordpress/$DOMAIN.secret
@@ -28,6 +28,6 @@ for DOMAIN in $DOMAINS; do
     echo "credentials_create.sh: $DOMAIN: Wordpress credentials already exists. Skipping credential creation"
   fi
 done
-ln -s conf/mysql services/mariadb/conf/
-ln -s conf/mysql services/wordpress/conf/
-ln -s conf/wordpress services/wordpress/conf/
+cp -r conf/mysql services/mariadb/conf/
+cp -r conf/mysql services/wordpress/conf/
+cp -r conf/wordpress services/wordpress/conf/

@@ -22,15 +22,20 @@ wp core download --path=/var/www/$DOMAIN --allow-root
 DB_NAME=$(grep "DB_NAME=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
 DB_USER=$(grep "DB_USER=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
 DB_PASSWORD=$(grep "DB_PASSWORD=" /mysql/$DOMAIN.secret | cut -d'=' -f2)
+REDIS_PW=$(grep "REDIS_PW=" /redis/redis.secret | cut -d'=' -f2)
 wget -O keys.secret https://api.wordpress.org/secret-key/1.1/salt/
 sed -i -e "/# INSERT SECRET KEYS HERE/r keys.secret" wp-config.php
 sed -i "s/{DB_NAME}/$DB_NAME/g" wp-config.php
 sed -i "s/{DB_USER}/$DB_USER/g" wp-config.php
 sed -i "s/{DB_PASSWORD}/$DB_PASSWORD/g" wp-config.php
 sed -i "s/{DB_HOST}/$MYSQL_HOST/g" wp-config.php
+sed -i "s/{WP_CACHE_KEY_SALT}/$DOMAIN/g" wp-config.php
+sed -i "s/{WP_REDIS_HOST}/$REDIS_HOST/g" wp-config.php
+sed -i "s/{WP_REDIS_PORT}/$REDIS_PORT/g" wp-config.php
+sed -i "s/{WP_REDIS_PASSWORD}/$REDIS_PW/g" wp-config.php
 mv wp-config.php /var/www/$DOMAIN
 
 # Move php-fpm config file to its respective location
 mv www.conf /etc/php/7.4/fpm/pool.d/
 
-rm -rf keys.secret mysql
+rm -rf keys.secret mysql redis

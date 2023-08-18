@@ -9,7 +9,8 @@ if ! wp core is-installed --path=/var/www/$DOMAIN --allow-root; then
   wp core install --path=/var/www/$DOMAIN --allow-root \
     --url="https://$DOMAIN" --title=$WP_TITLE --admin_user=$WP_ADMIN \
     --admin_password=$WP_ADMIN_PW --admin_email=$WP_ADMIN_EMAIL
-  rm -f /wp_default_config/$DOMAIN.keys
+  wp plugin install redis-cache --activate --path=/var/www/$DOMAIN_NAME --allow-root
+  wp redis enable --path=/var/www/$DOMAIN_NAME --allow-root
   #  Set up files permissions for wordpress
   chown -R www-data:www-data /var/www/$DOMAIN
   find /var/www/$DOMAIN -type d -exec chmod 755 {} \;

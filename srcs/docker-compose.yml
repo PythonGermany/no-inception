@@ -30,6 +30,9 @@ services:
         # Database connection info
         - MYSQL_HOST_ARG=${MYSQL_HOST}
         - MYSQL_PORT_ARG=${MYSQL_PORT}
+        # Redis connection info
+        - REDIS_HOST_ARG=${REDIS_HOST}
+        - REDIS_PORT_ARG=${REDIS_PORT}
     restart: unless-stopped
     volumes:
       - wordpress:/var/www/
@@ -49,6 +52,17 @@ services:
     restart: unless-stopped
     volumes:
       - mariadb:/var/lib/mysql
+    networks:
+      - docker-network
+
+  redis:
+    container_name: ${REDIS_HOST}
+    build:
+      context: ./requirements/redis
+      args:
+        - REDIS_HOST_ARG=${REDIS_HOST}
+        - REDIS_PORT_ARG=${REDIS_PORT}
+    restart: unless-stopped
     networks:
       - docker-network
 

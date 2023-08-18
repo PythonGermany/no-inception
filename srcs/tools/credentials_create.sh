@@ -6,6 +6,7 @@ fi
 
 mkdir -p conf/mysql
 mkdir -p conf/wordpress
+mkdir -p conf/redis
 DOMAIN=$(grep "DOMAIN=" .env | cut -d'=' -f2)
 if [ ! -f conf/mysql/$DOMAIN.secret ]; then
   echo "DB_NAME=wp_$DOMAIN" > conf/mysql/$DOMAIN.secret
@@ -25,6 +26,15 @@ if [ ! -f conf/wordpress/$DOMAIN.secret ]; then
 else
   echo "credentials_create.sh: $DOMAIN: Wordpress credentials already exists. Skipping credential creation"
 fi
+
+if [ ! -f conf/redis/redis.secret ]; then
+  echo "REDIS_PW=$(openssl rand -base64 64 | tr -d '=\n\/')" > conf/redis/redis.secret
+else
+  echo "credentials_create.sh: $DOMAIN: Redis credentials already exists. Skipping credential creation"
+fi
+
 cp -r conf/mysql services/mariadb/conf/
 cp -r conf/mysql services/wordpress/conf/
 cp -r conf/wordpress services/wordpress/conf/
+cp -r conf/redis services/redis/conf/
+cp -r conf/redis services/wordpress/conf/

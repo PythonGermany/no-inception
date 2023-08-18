@@ -51,6 +51,11 @@ define( 'DB_COLLATE', '' );
 # INSERT SECRET KEYS HERE
 
 define('FORCE_SSL_ADMIN', true);
+define('WP_CACHE', true);
+define('WP_CACHE_KEY_SALT', '{WP_CACHE_KEY_SALT}');
+define('WP_REDIS_HOST', '{WP_REDIS_HOST}');
+define('WP_REDIS_PORT', '{WP_REDIS_PORT}');
+define('WP_REDIS_PASSWORD', '{WP_REDIS_PASSWORD}');
 
 /**#@-*/
 
